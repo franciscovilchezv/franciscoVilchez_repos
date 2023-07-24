@@ -26,15 +26,26 @@ async function main() {
 
   const tribe2 = await prisma.tribe.create({
     data: {
-      name: 'Tribe 1',
+      name: 'Tribe 2',
       status: 2,
       organizationId: org2.id_organization,
     },
   });
 
-  const repo1 = await prisma.repository.create({
+  const repo1_1 = await prisma.repository.create({
     data: {
-      name: 'Repo 1',
+      id_repository: 1,
+      name: 'Repo 1_1',
+      state: 'E',
+      status: 'A',
+      tribeId: tribe1.id_tribe,
+    },
+  });
+
+  const repo2_1 = await prisma.repository.create({
+    data: {
+      id_repository: 2,
+      name: 'Repo 2_1',
       state: 'E',
       status: 'A',
       tribeId: tribe1.id_tribe,
@@ -43,6 +54,7 @@ async function main() {
 
   const repo2 = await prisma.repository.create({
     data: {
+      id_repository: 3,
       name: 'Repo 2',
       state: 'D',
       status: 'I',
@@ -50,14 +62,25 @@ async function main() {
     },
   });
 
-  const metrics1 = await prisma.metrics.create({
+  const metrics1_1 = await prisma.metrics.create({
     data: {
       coverage: 10,
       bugs: 2,
       vulnerabilities: 15,
       hotspot: 1,
       code_smells: 11,
-      repositoryId: repo1.id_repository,
+      repositoryId: repo1_1.id_repository,
+    },
+  });
+
+  const metrics2_1 = await prisma.metrics.create({
+    data: {
+      coverage: 10,
+      bugs: 2,
+      vulnerabilities: 15,
+      hotspot: 1,
+      code_smells: 11,
+      repositoryId: repo2_1.id_repository,
     },
   });
 }

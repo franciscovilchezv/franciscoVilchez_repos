@@ -6,6 +6,9 @@ import { ReadOrganizationUsescases } from '../../usescases/organization/read.org
 import { CreateOrganizationUsescases } from '../../usescases/organization/create.organization.usescases';
 import { DeleteOrganizationUsescases } from '../../usescases/organization/delete.organization.usescases';
 import { UpdateOrganizationUsescases } from '../../usescases/organization/update.organization.usescases';
+import { ReadMetricTribeUsescases } from '../../usescases/tribe/read-metric.tribe.usescases';
+import { TribeRepository } from '../repositories/tribe.repository';
+import { VerificationRepository } from '../repositories/verification.repository';
 
 @Module({
   imports: [RepositoriesModule],
@@ -18,6 +21,8 @@ export class UsecasesProxyModule {
     'updateOrganizationUsecasesProxy';
   static DELETE_ORGANIZATIONS_USECASES_PROXY =
     'deleteOrganizationUsecasesProxy';
+
+  static GET_TRIBE_METRICS_USECASES_PROXY = 'getTribeMetricsUsecasesProxy';
 
   static register(): DynamicModule {
     return {
@@ -55,12 +60,27 @@ export class UsecasesProxyModule {
               new DeleteOrganizationUsescases(organizationRepository),
             ),
         },
+        {
+          inject: [TribeRepository, VerificationRepository],
+          provide: UsecasesProxyModule.GET_TRIBE_METRICS_USECASES_PROXY,
+          useFactory: (
+            tribeRepository: TribeRepository,
+            verificationRepository: VerificationRepository,
+          ) =>
+            new UsecasesProxy(
+              new ReadMetricTribeUsescases(
+                tribeRepository,
+                verificationRepository,
+              ),
+            ),
+        },
       ],
       exports: [
         UsecasesProxyModule.GET_ORGANIZATIONS_USECASES_PROXY,
         UsecasesProxyModule.CREATE_ORGANIZATIONS_USECASES_PROXY,
         UsecasesProxyModule.UPDATE_ORGANIZATIONS_USECASES_PROXY,
         UsecasesProxyModule.DELETE_ORGANIZATIONS_USECASES_PROXY,
+        UsecasesProxyModule.GET_TRIBE_METRICS_USECASES_PROXY,
       ],
     };
   }
