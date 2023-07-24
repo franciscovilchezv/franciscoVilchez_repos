@@ -3,12 +3,19 @@ import { RepositoriesModule } from '../repositories/repositories.module';
 import { OrganizationRepository } from '../repositories/organization.repository';
 import { UsecasesProxy } from './usecases-proxy';
 import { ReadOrganizationUsescases } from '../../usescases/organization/read.organization.usescases';
+import { CreateOrganizationUsescases } from '../../usescases/organization/create.organization.usescases';
 
 @Module({
   imports: [RepositoriesModule],
 })
 export class UsecasesProxyModule {
   static GET_ORGANIZATIONS_USECASES_PROXY = 'getOrganizationUsecasesProxy';
+  static CREATE_ORGANIZATIONS_USECASES_PROXY =
+    'createOrganizationUsecasesProxy';
+  static UPDATE_ORGANIZATIONS_USECASES_PROXY =
+    'updateOrganizationUsecasesProxy';
+  static DELETE_ORGANIZATIONS_USECASES_PROXY =
+    'deleteOrganizationUsecasesProxy';
 
   static register(): DynamicModule {
     return {
@@ -22,8 +29,19 @@ export class UsecasesProxyModule {
               new ReadOrganizationUsescases(organizationRepository),
             ),
         },
+        {
+          inject: [OrganizationRepository],
+          provide: UsecasesProxyModule.CREATE_ORGANIZATIONS_USECASES_PROXY,
+          useFactory: (organizationRepository: OrganizationRepository) =>
+            new UsecasesProxy(
+              new CreateOrganizationUsescases(organizationRepository),
+            ),
+        },
       ],
-      exports: [UsecasesProxyModule.GET_ORGANIZATIONS_USECASES_PROXY],
+      exports: [
+        UsecasesProxyModule.GET_ORGANIZATIONS_USECASES_PROXY,
+        UsecasesProxyModule.CREATE_ORGANIZATIONS_USECASES_PROXY,
+      ],
     };
   }
 }

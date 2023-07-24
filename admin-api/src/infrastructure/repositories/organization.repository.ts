@@ -6,18 +6,26 @@ import { PrismaService } from '../config/prisma/prisma.service';
 @Injectable()
 export class OrganizationRepository implements IOrganizationRepository {
   constructor(private readonly prismaService: PrismaService) {}
-  async findAll(): Promise<OrganizationEntity[]> {
-    return await this.prismaService.organization.findMany();
+
+  findAll(): Promise<OrganizationEntity[]> {
+    return this.prismaService.organization.findMany();
   }
+
   insert(organization: OrganizationEntity): Promise<OrganizationEntity> {
-    throw new Error('Method not implemented.');
+    return this.prismaService.organization.create({
+      data: {
+        name: organization.name,
+      },
+    });
   }
+
   update(
     id: string,
     organization: Partial<OrganizationEntity>,
   ): Promise<OrganizationEntity> {
     throw new Error('Method not implemented.');
   }
+
   delete(id: string) {
     throw new Error('Method not implemented.');
   }

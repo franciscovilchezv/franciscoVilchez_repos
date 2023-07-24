@@ -1,3 +1,11 @@
-### GET organizations
+### Get organizations
 
 GET http://localhost:3000/organization
+
+### Insert organization
+POST http://localhost:3000/organization
+Content-Type: application/json
+
+{
+  "name": "Organization 2"
+}
