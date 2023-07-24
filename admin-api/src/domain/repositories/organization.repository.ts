@@ -4,7 +4,7 @@ export interface IOrganizationRepository {
   findAll(): Promise<OrganizationEntity[]>;
   insert(organization: OrganizationEntity): Promise<OrganizationEntity>;
   update(
-    id: string,
+    id: number,
     organization: Partial<OrganizationEntity>,
   ): Promise<OrganizationEntity>;
   delete(id: number): Promise<OrganizationEntity[]>;

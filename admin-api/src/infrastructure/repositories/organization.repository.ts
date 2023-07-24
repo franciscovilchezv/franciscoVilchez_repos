@@ -20,10 +20,13 @@ export class OrganizationRepository implements IOrganizationRepository {
   }
 
   update(
-    id: string,
+    id: number,
     organization: Partial<OrganizationEntity>,
   ): Promise<OrganizationEntity> {
-    throw new Error('Method not implemented.');
+    return this.prismaService.organization.update({
+      where: { id_organization: id },
+      data: organization,
+    });
   }
 
   async delete(id: number): Promise<OrganizationEntity[]> {

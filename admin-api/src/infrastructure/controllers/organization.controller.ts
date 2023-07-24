@@ -5,6 +5,7 @@ import {
   Get,
   Inject,
   Param,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { UsecasesProxyModule } from '../usecases-proxy/usecases-proxy.module';
@@ -13,6 +14,7 @@ import { ReadOrganizationUsescases } from '../../usescases/organization/read.org
 import { OrganizationEntity } from '../../domain/model/organization/organization.entity';
 import { CreateOrganizationUsescases } from '../../usescases/organization/create.organization.usescases';
 import { DeleteOrganizationUsescases } from '../../usescases/organization/delete.organization.usescases';
+import { UpdateOrganizationUsescases } from '../../usescases/organization/update.organization.usescases';
 
 @Controller('organization')
 export class OrganizationController {
@@ -22,6 +24,9 @@ export class OrganizationController {
 
     @Inject(UsecasesProxyModule.CREATE_ORGANIZATIONS_USECASES_PROXY)
     private readonly createOrganizationUsecaseProxy: UsecasesProxy<CreateOrganizationUsescases>,
+
+    @Inject(UsecasesProxyModule.UPDATE_ORGANIZATIONS_USECASES_PROXY)
+    private readonly updateOrganizationUsecaseProxy: UsecasesProxy<UpdateOrganizationUsescases>,
 
     @Inject(UsecasesProxyModule.DELETE_ORGANIZATIONS_USECASES_PROXY)
     private readonly deleteOrganizationUsecaseProxy: UsecasesProxy<DeleteOrganizationUsescases>,
@@ -37,6 +42,16 @@ export class OrganizationController {
     return await this.createOrganizationUsecaseProxy
       .getInstance()
       .execute(organizationEntity);
+  }
+
+  @Patch(':id')
+  async update(
+    @Param('id') id: number,
+    @Body() organizationEntity: Partial<OrganizationEntity>,
+  ) {
+    return await this.updateOrganizationUsecaseProxy
+      .getInstance()
+      .execute(id, organizationEntity);
   }
 
   @Delete(':id')

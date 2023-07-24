@@ -10,5 +10,13 @@ Content-Type: application/json
   "name": "Organization 4"
 }
 
+### Update organization
+PATCH http://localhost:3000/organization/885079822218821633
+Content-Type: application/json
+
+{
+  "name": "Organization 5"
+}
+
 ### Delete organization
 DELETE http://localhost:3000/organization/885079783026491393
