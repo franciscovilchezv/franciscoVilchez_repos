@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id_organization BigInt  @id @default(autoincrement())
+  name            String  @db.Char(50)
+  tribes          Tribe[]
+}
+
+model Tribe {
+  id_tribe       BigInt       @id @default(autoincrement())
+  organization   Organization @relation(fields: [organizationId], references: [id_organization])
+  organizationId BigInt
+  repositories   Repository[]
+  name           String       @db.Char(50)
+  status         Int
+}
+
+model Repository {
+  id_repository BigInt   @id @default(autoincrement())
+  name          String   @db.Char(50)
+  state         String   @db.Char(1)
+  created_date  DateTime @default(now())
+  status        String   @db.Char(1)
+  tribe         Tribe    @relation(fields: [tribeId], references: [id_tribe])
+  tribeId       BigInt
+  metrics       Metrics?
+}
+
+model Metrics {
+  repostory       Repository @relation(fields: [repositoryId], references: [id_repository])
+  repositoryId    BigInt     @unique
+  coverage        Float
+  bugs            Int
+  vulnerabilities Int
+  hotspot         Int
+  code_smells     Int
+}

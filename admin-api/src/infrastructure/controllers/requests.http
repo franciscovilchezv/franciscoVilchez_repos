@@ -1,0 +1,3 @@
+### GET organizations
+
+GET http://localhost:3000/organization
