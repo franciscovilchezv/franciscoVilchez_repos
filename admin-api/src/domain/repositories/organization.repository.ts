@@ -7,5 +7,5 @@ export interface IOrganizationRepository {
     id: string,
     organization: Partial<OrganizationEntity>,
   ): Promise<OrganizationEntity>;
-  delete(id: string);
+  delete(id: number): Promise<OrganizationEntity[]>;
 }

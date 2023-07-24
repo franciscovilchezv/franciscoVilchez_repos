@@ -26,7 +26,10 @@ export class OrganizationRepository implements IOrganizationRepository {
     throw new Error('Method not implemented.');
   }
 
-  delete(id: string) {
-    throw new Error('Method not implemented.');
+  async delete(id: number): Promise<OrganizationEntity[]> {
+    await this.prismaService.organization.delete({
+      where: { id_organization: id },
+    });
+    return await this.prismaService.organization.findMany();
   }
 }

@@ -4,6 +4,7 @@ import { OrganizationRepository } from '../repositories/organization.repository'
 import { UsecasesProxy } from './usecases-proxy';
 import { ReadOrganizationUsescases } from '../../usescases/organization/read.organization.usescases';
 import { CreateOrganizationUsescases } from '../../usescases/organization/create.organization.usescases';
+import { DeleteOrganizationUsescases } from '../../usescases/organization/delete.organization.usescases';
 
 @Module({
   imports: [RepositoriesModule],
@@ -37,10 +38,19 @@ export class UsecasesProxyModule {
               new CreateOrganizationUsescases(organizationRepository),
             ),
         },
+        {
+          inject: [OrganizationRepository],
+          provide: UsecasesProxyModule.DELETE_ORGANIZATIONS_USECASES_PROXY,
+          useFactory: (organizationRepository: OrganizationRepository) =>
+            new UsecasesProxy(
+              new DeleteOrganizationUsescases(organizationRepository),
+            ),
+        },
       ],
       exports: [
         UsecasesProxyModule.GET_ORGANIZATIONS_USECASES_PROXY,
         UsecasesProxyModule.CREATE_ORGANIZATIONS_USECASES_PROXY,
+        UsecasesProxyModule.DELETE_ORGANIZATIONS_USECASES_PROXY,
       ],
     };
   }

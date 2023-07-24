@@ -7,5 +7,8 @@ POST http://localhost:3000/organization
 Content-Type: application/json
 
 {
-  "name": "Organization 2"
+  "name": "Organization 4"
 }
+
+### Delete organization
+DELETE http://localhost:3000/organization/885079783026491393
