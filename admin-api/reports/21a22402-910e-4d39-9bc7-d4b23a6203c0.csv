@@ -1,0 +1,3 @@
+id,name,tribe,organization,coverage,codeSmells,bugs,vulnerabilities,hotspots,verificationState,state
+1,Repo 1_1,Tribe 1,Organization 11,76%,11,2,15,1,Verificado,Habilitado
+2,Repo 2_1,Tribe 1,Organization 11,77%,11,2,15,1,En espera,Habilitado

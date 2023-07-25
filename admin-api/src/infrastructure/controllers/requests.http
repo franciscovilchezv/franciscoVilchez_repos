@@ -11,19 +11,19 @@ Content-Type: application/json
 }
 
 ### Update organization
-PATCH http://localhost:3000/organization/885079822218821633
+PATCH http://localhost:3000/organization/885302649400524801
 Content-Type: application/json
 
 {
-  "name": "Organization 5"
+  "name": "Organization 11"
 }
 
 ### Delete organization
-DELETE http://localhost:3000/organization/885079783026491393
+DELETE http://localhost:3000/organization/885385577359572993
 
 
 ### Get metrics
-GET http://localhost:3000/tribe/885127672539447297/metrics
+GET http://localhost:3000/tribe/1/metrics
 
 ### Get report
 GET http://localhost:3000/tribe/1/report

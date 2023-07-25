@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { IOrganizationRepository } from '../../domain/repositories/organization.repository';
 import { OrganizationEntity } from '../../domain/model/organization/organization.entity';
 import { PrismaService } from '../config/prisma/prisma.service';
+import { CreateOrganizationDTO } from '../../domain/model/organization/create-organization.dto';
+import { UpdateOrganizationDTO } from '../../domain/model/organization/update-organization.dto';
 
 @Injectable()
 export class OrganizationRepository implements IOrganizationRepository {
@@ -11,7 +13,7 @@ export class OrganizationRepository implements IOrganizationRepository {
     return this.prismaService.organization.findMany();
   }
 
-  insert(organization: OrganizationEntity): Promise<OrganizationEntity> {
+  insert(organization: CreateOrganizationDTO): Promise<OrganizationEntity> {
     return this.prismaService.organization.create({
       data: {
         name: organization.name,
@@ -21,7 +23,7 @@ export class OrganizationRepository implements IOrganizationRepository {
 
   update(
     id: number,
-    organization: Partial<OrganizationEntity>,
+    organization: Partial<UpdateOrganizationDTO>,
   ): Promise<OrganizationEntity> {
     return this.prismaService.organization.update({
       where: { id_organization: id },

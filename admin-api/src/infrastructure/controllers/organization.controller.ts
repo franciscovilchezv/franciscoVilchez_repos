@@ -11,11 +11,15 @@ import {
 import { UsecasesProxyModule } from '../usecases-proxy/usecases-proxy.module';
 import { UsecasesProxy } from '../usecases-proxy/usecases-proxy';
 import { ReadOrganizationUsescases } from '../../usescases/organization/read.organization.usescases';
-import { OrganizationEntity } from '../../domain/model/organization/organization.entity';
 import { CreateOrganizationUsescases } from '../../usescases/organization/create.organization.usescases';
 import { DeleteOrganizationUsescases } from '../../usescases/organization/delete.organization.usescases';
 import { UpdateOrganizationUsescases } from '../../usescases/organization/update.organization.usescases';
+import { CreateOrganizationDTO } from '../../domain/model/organization/create-organization.dto';
+import { UpdateOrganizationDTO } from '../../domain/model/organization/update-organization.dto';
+import { Serialize } from '../common/interceptors/serialize.interceptor';
+import { OrganizationPresenter } from '../../domain/model/organization/organization.presenter';
 
+@Serialize(OrganizationPresenter)
 @Controller('organization')
 export class OrganizationController {
   constructor(
@@ -38,7 +42,7 @@ export class OrganizationController {
   }
 
   @Post()
-  async insert(@Body() organizationEntity: OrganizationEntity) {
+  async insert(@Body() organizationEntity: CreateOrganizationDTO) {
     return await this.createOrganizationUsecaseProxy
       .getInstance()
       .execute(organizationEntity);
@@ -47,7 +51,7 @@ export class OrganizationController {
   @Patch(':id')
   async update(
     @Param('id') id: number,
-    @Body() organizationEntity: Partial<OrganizationEntity>,
+    @Body() organizationEntity: Partial<UpdateOrganizationDTO>,
   ) {
     return await this.updateOrganizationUsecaseProxy
       .getInstance()
