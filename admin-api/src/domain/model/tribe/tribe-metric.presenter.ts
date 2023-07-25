@@ -1,4 +1,4 @@
-export class TribeMetricResponse {
+export class TribeMetricPresenter {
   id: bigint;
   name: string;
   tribe: string;

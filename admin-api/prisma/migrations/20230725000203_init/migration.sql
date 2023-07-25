@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE "Organization" (
     "id_organization" INT8 NOT NULL DEFAULT unique_rowid(),
-    "name" CHAR(50) NOT NULL,
+    "name" STRING NOT NULL,
 
     CONSTRAINT "Organization_pkey" PRIMARY KEY ("id_organization")
 );
@@ -10,7 +10,7 @@ CREATE TABLE "Organization" (
 CREATE TABLE "Tribe" (
     "id_tribe" INT8 NOT NULL DEFAULT unique_rowid(),
     "organizationId" INT8 NOT NULL,
-    "name" CHAR(50) NOT NULL,
+    "name" STRING NOT NULL,
     "status" INT4 NOT NULL,
 
     CONSTRAINT "Tribe_pkey" PRIMARY KEY ("id_tribe")
@@ -19,7 +19,7 @@ CREATE TABLE "Tribe" (
 -- CreateTable
 CREATE TABLE "Repository" (
     "id_repository" INT8 NOT NULL DEFAULT unique_rowid(),
-    "name" CHAR(50) NOT NULL,
+    "name" STRING NOT NULL,
     "state" CHAR(1) NOT NULL,
     "created_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "status" CHAR(1) NOT NULL,

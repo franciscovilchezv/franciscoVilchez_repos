@@ -1,12 +1,23 @@
-export class TribeMetricEntity {
-  id: bigint;
-  name: string;
-  tribe: string;
-  organization: string;
+export class MetricEntity {
   coverage: number;
-  codeSmells: number;
+  code_smells: number;
   bugs: number;
   vulnerabilities: number;
-  hotspots: number;
+  hotspot: number;
+}
+
+export class RepositoryEntity {
+  id_repository: bigint;
+  name: string;
+  metrics: MetricEntity;
   state: string;
+}
+
+export class TribeMetricEntity {
+  id_tribe: bigint;
+  name: string;
+  organization: {
+    name: string;
+  };
+  repositories: RepositoryEntity[];
 }

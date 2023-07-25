@@ -12,7 +12,7 @@ datasource db {
 
 model Organization {
   id_organization BigInt  @id @default(autoincrement())
-  name            String  @db.Char(50)
+  name            String
   tribes          Tribe[]
 }
 
@@ -21,13 +21,13 @@ model Tribe {
   organization   Organization @relation(fields: [organizationId], references: [id_organization])
   organizationId BigInt
   repositories   Repository[]
-  name           String       @db.Char(50)
+  name           String
   status         Int
 }
 
 model Repository {
   id_repository BigInt   @id @default(autoincrement())
-  name          String   @db.Char(50)
+  name          String
   state         String   @db.Char(1)
   created_date  DateTime @default(now())
   status        String   @db.Char(1)
@@ -37,7 +37,7 @@ model Repository {
 }
 
 model Metrics {
-  repostory       Repository @relation(fields: [repositoryId], references: [id_repository])
+  repository      Repository @relation(fields: [repositoryId], references: [id_repository])
   repositoryId    BigInt     @unique
   coverage        Float
   bugs            Int

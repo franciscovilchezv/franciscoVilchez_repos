@@ -9,9 +9,13 @@ import { UpdateOrganizationUsescases } from '../../usescases/organization/update
 import { ReadMetricTribeUsescases } from '../../usescases/tribe/read-metric.tribe.usescases';
 import { TribeRepository } from '../repositories/tribe.repository';
 import { VerificationRepository } from '../repositories/verification.repository';
+import { ExceptionsService } from '../exceptions/exceptions.service';
+import { ExceptionsModule } from '../exceptions/exceptions.module';
+import { UtilsModule } from '../../utils/utils.module';
+import { VerboseService } from '../../utils/verbose/verbose.service';
 
 @Module({
-  imports: [RepositoriesModule],
+  imports: [RepositoriesModule, ExceptionsModule, UtilsModule],
 })
 export class UsecasesProxyModule {
   static GET_ORGANIZATIONS_USECASES_PROXY = 'getOrganizationUsecasesProxy';
@@ -61,16 +65,20 @@ export class UsecasesProxyModule {
             ),
         },
         {
-          inject: [TribeRepository, VerificationRepository],
+          inject: [TribeRepository, VerificationRepository, ExceptionsService],
           provide: UsecasesProxyModule.GET_TRIBE_METRICS_USECASES_PROXY,
           useFactory: (
             tribeRepository: TribeRepository,
             verificationRepository: VerificationRepository,
+            exceptionService: ExceptionsService,
+            verboseService: VerboseService,
           ) =>
             new UsecasesProxy(
               new ReadMetricTribeUsescases(
                 tribeRepository,
                 verificationRepository,
+                exceptionService,
+                verboseService,
               ),
             ),
         },
