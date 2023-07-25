@@ -24,3 +24,6 @@ DELETE http://localhost:3000/organization/885079783026491393
 
 ### Get metrics
 GET http://localhost:3000/tribe/885127672539447297/metrics
+
+### Get report
+GET http://localhost:3000/tribe/1/report

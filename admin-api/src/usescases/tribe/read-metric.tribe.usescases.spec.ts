@@ -9,10 +9,10 @@ import {
   REPOSITORY_STATE,
   TRIBE_REPOSITORY_STATE,
 } from '../../domain/model/tribe/tribe-repository.constant';
-import { VerboseService } from '../../utils/verbose/verbose.service';
 import { UtilsModule } from '../../utils/utils.module';
 import { VERIFICATION_VALUES } from '../../domain/model/verification/verification.constant';
 import { NotFoundException } from '@nestjs/common';
+import { TribeMetricMapper } from '../../utils/mappers/tribe-metric.mapper';
 
 describe('ReadMetricTribeUsescases', () => {
   let provider: ReadMetricTribeUsescases;
@@ -98,13 +98,13 @@ describe('ReadMetricTribeUsescases', () => {
     }).compile();
 
     const exceptionService = module.get<ExceptionsService>(ExceptionsService);
-    const verboseService = module.get<VerboseService>(VerboseService);
+    const tribeMetricMapper = module.get<TribeMetricMapper>(TribeMetricMapper);
 
     provider = new ReadMetricTribeUsescases(
       fakeTribeRepository as ITribeRepository,
       fakeVerificationRepository as IVerificationRepository,
       exceptionService,
-      verboseService,
+      tribeMetricMapper,
     );
   });
 
@@ -121,7 +121,8 @@ describe('ReadMetricTribeUsescases', () => {
 
   it('should return repository state from API', async () => {
     const res = await provider.execute(1);
-    expect(res).toStrictEqual({
+
+    expect(res).toEqual({
       repositories: expect.arrayContaining([
         {
           id: repo1.id_repository,

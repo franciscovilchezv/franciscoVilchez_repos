@@ -1,3 +1,4 @@
+import { IDiskPersistance } from '../../domain/adapters/disk-persistance.interface';
 import { IException } from '../../domain/exception/exceptions.interface';
 import { TribeMetricEntity } from '../../domain/model/tribe/tribe-metric.entity';
 import { TribeMetricsPresenter } from '../../domain/model/tribe/tribe-metrics.presenter';
@@ -6,15 +7,16 @@ import { ITribeRepository } from '../../domain/repositories/tribe.repository';
 import { IVerificationRepository } from '../../domain/repositories/verification.repository';
 import { TribeMetricMapper } from '../../utils/mappers/tribe-metric.mapper';
 
-export class ReadMetricTribeUsescases {
+export class GenerateReportUsescases {
   constructor(
     private readonly tribeRepository: ITribeRepository,
     private readonly verificationRepository: IVerificationRepository,
     private readonly exceptionsService: IException,
     private readonly tribeMetricMapper: TribeMetricMapper,
+    private readonly diskPersistanceService: IDiskPersistance,
   ) {}
 
-  async execute(id: number): Promise<TribeMetricsPresenter> {
+  async execute(id: number): Promise<string> {
     const tribe: TribeMetricEntity = await this.tribeRepository.getMetrics(id);
 
     if (!tribe)
@@ -34,6 +36,6 @@ export class ReadMetricTribeUsescases {
     const response: TribeMetricsPresenter =
       this.tribeMetricMapper.mapEntitiesToPresenter(tribe, verifications);
 
-    return response;
+    return this.diskPersistanceService.persistData(response.toCSVFormat());
   }
 }

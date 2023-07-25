@@ -4,11 +4,11 @@ import { UtilsModule } from '../src/utils/utils.module';
 import { ExceptionsModule } from '../src/infrastructure/exceptions/exceptions.module';
 import { TribeRepository } from '../src/infrastructure/repositories/tribe.repository';
 import { ExceptionsService } from '../src/infrastructure/exceptions/exceptions.service';
-import { VerboseService } from '../src/utils/verbose/verbose.service';
 import { ReadMetricTribeUsescases } from '../src/usescases/tribe/read-metric.tribe.usescases';
 import { VerificationRepository } from '../src/infrastructure/repositories/verification.repository';
 import { VERIFICATION_VALUES } from '../src/domain/model/verification/verification.constant';
 import { TRIBE_REPOSITORY_STATE } from '../src/domain/model/tribe/tribe-repository.constant';
+import { TribeMetricMapper } from '../src/utils/mappers/tribe-metric.mapper';
 
 describe('ReadMetricTribeUsescases', () => {
   let provider: ReadMetricTribeUsescases;
@@ -24,13 +24,13 @@ describe('ReadMetricTribeUsescases', () => {
       VerificationRepository,
     );
     const exceptionService = module.get<ExceptionsService>(ExceptionsService);
-    const verboseService = module.get<VerboseService>(VerboseService);
+    const tribeMetricMapper = module.get<TribeMetricMapper>(TribeMetricMapper);
 
     provider = new ReadMetricTribeUsescases(
       tribeRepository,
       verificationRepository,
       exceptionService,
-      verboseService,
+      tribeMetricMapper,
     );
   });
 
@@ -41,7 +41,7 @@ describe('ReadMetricTribeUsescases', () => {
   it('should return metrics with valid date, state and coverage', async () => {
     const res = await provider.execute(1);
 
-    expect(res).toStrictEqual({
+    expect(res).toEqual({
       repositories: expect.arrayContaining([
         {
           id: BigInt(1),

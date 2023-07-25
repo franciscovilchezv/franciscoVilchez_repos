@@ -12,10 +12,13 @@ import { VerificationRepository } from '../repositories/verification.repository'
 import { ExceptionsService } from '../exceptions/exceptions.service';
 import { ExceptionsModule } from '../exceptions/exceptions.module';
 import { UtilsModule } from '../../utils/utils.module';
-import { VerboseService } from '../../utils/verbose/verbose.service';
+import { AdaptersModule } from '../adapters/adapters.module';
+import { FileSystemPersistanceService } from '../adapters/file-system-persistance.service';
+import { TribeMetricMapper } from '../../utils/mappers/tribe-metric.mapper';
+import { GenerateReportUsescases } from '../../usescases/tribe/generate-report.usescases';
 
 @Module({
-  imports: [RepositoriesModule, ExceptionsModule, UtilsModule],
+  imports: [RepositoriesModule, ExceptionsModule, UtilsModule, AdaptersModule],
 })
 export class UsecasesProxyModule {
   static GET_ORGANIZATIONS_USECASES_PROXY = 'getOrganizationUsecasesProxy';
@@ -27,6 +30,8 @@ export class UsecasesProxyModule {
     'deleteOrganizationUsecasesProxy';
 
   static GET_TRIBE_METRICS_USECASES_PROXY = 'getTribeMetricsUsecasesProxy';
+  static GENERATE_TRIBE_METRICS_REPORT_USECASES_PROXY =
+    'generateTribeMetricsReportUsecasesProxy';
 
   static register(): DynamicModule {
     return {
@@ -65,20 +70,52 @@ export class UsecasesProxyModule {
             ),
         },
         {
-          inject: [TribeRepository, VerificationRepository, ExceptionsService],
+          inject: [
+            TribeRepository,
+            VerificationRepository,
+            ExceptionsService,
+            TribeMetricMapper,
+          ],
           provide: UsecasesProxyModule.GET_TRIBE_METRICS_USECASES_PROXY,
           useFactory: (
             tribeRepository: TribeRepository,
             verificationRepository: VerificationRepository,
             exceptionService: ExceptionsService,
-            verboseService: VerboseService,
+            tribeMetricMapper: TribeMetricMapper,
           ) =>
             new UsecasesProxy(
               new ReadMetricTribeUsescases(
                 tribeRepository,
                 verificationRepository,
                 exceptionService,
-                verboseService,
+                tribeMetricMapper,
+              ),
+            ),
+        },
+        {
+          inject: [
+            TribeRepository,
+            VerificationRepository,
+            ExceptionsService,
+            TribeMetricMapper,
+            FileSystemPersistanceService,
+          ],
+          provide:
+            UsecasesProxyModule.GENERATE_TRIBE_METRICS_REPORT_USECASES_PROXY,
+          useFactory: (
+            tribeRepository: TribeRepository,
+            verificationRepository: VerificationRepository,
+            exceptionService: ExceptionsService,
+            tribeMetricsMapper: TribeMetricMapper,
+            diskPersistanceService: FileSystemPersistanceService,
+          ) =>
+            new UsecasesProxy(
+              new GenerateReportUsescases(
+                tribeRepository,
+                verificationRepository,
+                exceptionService,
+                tribeMetricsMapper,
+                diskPersistanceService,
               ),
             ),
         },
@@ -89,6 +126,7 @@ export class UsecasesProxyModule {
         UsecasesProxyModule.UPDATE_ORGANIZATIONS_USECASES_PROXY,
         UsecasesProxyModule.DELETE_ORGANIZATIONS_USECASES_PROXY,
         UsecasesProxyModule.GET_TRIBE_METRICS_USECASES_PROXY,
+        UsecasesProxyModule.GENERATE_TRIBE_METRICS_REPORT_USECASES_PROXY,
       ],
     };
   }
