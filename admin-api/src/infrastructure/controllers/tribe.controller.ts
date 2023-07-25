@@ -10,7 +10,7 @@ export class TribeController {
     private readonly getTribeMetricsUsecaseProxy: UsecasesProxy<ReadMetricTribeUsescases>,
   ) {}
 
-  @Get(':id')
+  @Get(':id/metrics')
   async getMetrics(@Param('id') id: number) {
     return this.getTribeMetricsUsecaseProxy.getInstance().execute(id);
   }
